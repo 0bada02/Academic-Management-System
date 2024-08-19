@@ -1,8 +1,8 @@
 package ju.Repository;
 
-import ju.Model.ClassStudent.ClassStudent;
-import ju.Model.ClassStudent.ClassStudentId;
-import org.springframework.data.jpa.repository.JpaRepository;
+import ju.Model.ClassStudent.*;
+import org.springframework.data.jpa.repository.*;
 
 public interface ClassStudentRepositry extends JpaRepository<ClassStudent, ClassStudentId> {
+    boolean existsByStudentId(Integer studentId);
 }

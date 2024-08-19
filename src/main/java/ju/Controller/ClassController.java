@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/department")
 public class ClassController {
@@ -23,13 +22,18 @@ public class ClassController {
 
     // Get a class by their ID
     @GetMapping("/{departmentId}/course/{courseId}/class/{id}")
-    public ResponseEntity<ClassDTO> getClassById(@PathVariable Integer departmentId, @PathVariable Integer courseId, @PathVariable Integer id) {
+    public ResponseEntity<ClassDTO> getClassById(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer courseId,
+            @PathVariable Integer id) {
         return ResponseEntity.ok(classService.getClassById(departmentId, courseId, id));
     }
 
     // Get all classes for a given course
     @GetMapping("/{departmentId}/course/{courseId}/class")
-    public ResponseEntity<List<ClassDTO>> getClassesInCourse(@PathVariable Integer departmentId, @PathVariable Integer courseId) {
+    public ResponseEntity<List<ClassDTO>> getClassesInCourse(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer courseId) {
         return ResponseEntity.ok(classService.getClassesInCourse(departmentId, courseId));
     }
 
@@ -47,7 +51,10 @@ public class ClassController {
 
     // Add a new class to a course
     @PostMapping("/{departmentId}/course/{courseId}/class")
-    public ResponseEntity<String> addCourse(@RequestBody Class aClass, @PathVariable Integer departmentId, @PathVariable Integer courseId) {
+    public ResponseEntity<String> addCourse(
+            @RequestBody Class aClass,
+            @PathVariable Integer departmentId,
+            @PathVariable Integer courseId) {
         boolean isAdded = classService.addClass(aClass, departmentId, courseId);
         if (isAdded) {
             return new ResponseEntity<>("Class added successfully!", HttpStatus.CREATED);
@@ -58,7 +65,10 @@ public class ClassController {
 
     // Delete a class by their ID
     @DeleteMapping("/{departmentId}/course/{courseId}/class/{id}")
-    public ResponseEntity<String> deleteClassById(@PathVariable Integer departmentId, @PathVariable Integer courseId, @PathVariable Integer id) {
+    public ResponseEntity<String> deleteClassById(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer courseId,
+            @PathVariable Integer id) {
         boolean isRemoved = classService.deleteClassById(departmentId, courseId, id);
         if (isRemoved) {
             return new ResponseEntity<>("Class deleted successfully!", HttpStatus.OK);
@@ -69,7 +79,9 @@ public class ClassController {
 
     // Delete an all classes in a given course
     @DeleteMapping("/{departmentId}/course/{courseId}/class")
-    public ResponseEntity<String> deleteClassesInCourse(@PathVariable Integer departmentId, @PathVariable Integer courseId) {
+    public ResponseEntity<String> deleteClassesInCourse(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer courseId) {
         boolean isRemoved = classService.deleteClassesInCourse(departmentId, courseId);
         if (isRemoved) {
             return new ResponseEntity<>("Classes deleted successfully!", HttpStatus.OK);
@@ -104,7 +116,11 @@ public class ClassController {
 
     // Update an existing class by their ID
     @PutMapping("/{departmentId}/course/{courseId}/class/{id}")
-    public ResponseEntity<String> updateClass(@RequestBody Class aClass, @PathVariable Integer departmentId, @PathVariable Integer courseId, @PathVariable Integer id) {
+    public ResponseEntity<String> updateClass(
+            @RequestBody Class aClass,
+            @PathVariable Integer departmentId,
+            @PathVariable Integer courseId,
+            @PathVariable Integer id) {
         boolean isUpdate = classService.updateClass(aClass, departmentId, courseId, id);
         if (isUpdate) {
             return new ResponseEntity<>("Class updated successfully!", HttpStatus.OK);
@@ -115,7 +131,12 @@ public class ClassController {
 
     // Add a student to a class
     @PostMapping("/{departmentId}/course/{courseId}/addStudent/{classId}/{studentId}")
-    public ResponseEntity<String> addStudentToClass(@PathVariable Integer departmentId, @PathVariable Integer courseId, @PathVariable Integer classId, @PathVariable Integer studentId, @RequestParam(required = false) Double grade) {
+    public ResponseEntity<String> addStudentToClass(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer courseId,
+            @PathVariable Integer classId,
+            @PathVariable Integer studentId,
+            @RequestParam(required = false) Double grade) {
         boolean isAdded = classService.addStudentToClass(departmentId, courseId, classId, studentId, grade);
         if (isAdded) {
             return new ResponseEntity<>(String.format("Student with ID %d added on class with ID %d successfully!", studentId, classId), HttpStatus.OK);
@@ -126,7 +147,11 @@ public class ClassController {
 
     // Remove a student to a class
     @DeleteMapping("/{departmentId}/course/{courseId}/removeStudent/{classId}/{studentId}")
-    public ResponseEntity<String> removeStudentFromClass(@PathVariable Integer departmentId, @PathVariable Integer courseId, @PathVariable Integer classId, @PathVariable Integer studentId) {
+    public ResponseEntity<String> removeStudentFromClass(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer courseId,
+            @PathVariable Integer classId,
+            @PathVariable Integer studentId) {
         boolean isAdded = classService.removeStudentFromClass(departmentId, courseId, classId, studentId);
         if (isAdded) {
             return new ResponseEntity<>(String.format("Student with ID %d deleted from class with ID %d successfully!", studentId, classId), HttpStatus.OK);
@@ -137,7 +162,11 @@ public class ClassController {
 
     // Add an instructor to a class
     @PostMapping("/{departmentId}/course/{courseId}/addInstructor/{classId}/{instructorId}")
-    public ResponseEntity<String> addInstructorToClass(@PathVariable Integer departmentId, @PathVariable Integer courseId, @PathVariable Integer classId, @PathVariable Integer instructorId) {
+    public ResponseEntity<String> addInstructorToClass(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer courseId,
+            @PathVariable Integer classId,
+            @PathVariable Integer instructorId) {
         boolean isAdded = classService.addInstructorToClass(departmentId, courseId, classId, instructorId);
         if (isAdded) {
             return new ResponseEntity<>(String.format("Instructor with ID %d added on class with ID %d successfully!", instructorId, classId), HttpStatus.OK);
@@ -147,8 +176,12 @@ public class ClassController {
     }
 
     // Remove an instructor to a class
-    @DeleteMapping("/{departmentId}/course/{courseId}/changeInstructor/{classId}/{instructorId}")
-    public ResponseEntity<String> changeInstructorInClass(@PathVariable Integer departmentId, @PathVariable Integer courseId, @PathVariable Integer classId, @PathVariable Integer instructorId) {
+    @PutMapping("/{departmentId}/course/{courseId}/changeInstructor/{classId}/{instructorId}")
+    public ResponseEntity<String> changeInstructorInClass(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer courseId,
+            @PathVariable Integer classId,
+            @PathVariable Integer instructorId) {
         boolean isAdded = classService.changeInstructorInClass(departmentId, courseId, classId, instructorId);
         if (isAdded) {
             return new ResponseEntity<>(String.format("Instructor with ID %d changed on class with ID %d successfully!", instructorId, classId), HttpStatus.OK);

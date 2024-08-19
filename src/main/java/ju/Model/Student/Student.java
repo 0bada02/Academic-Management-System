@@ -3,6 +3,7 @@ package ju.Model.Student;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import ju.Model.Class.Class;
 import ju.Model.ClassStudent.ClassStudent;
 import ju.Model.Department.Department;
 import lombok.*;
@@ -45,10 +46,12 @@ public class Student {
     @Column(nullable = false)
     private Integer totalHoursRemaining;
 
-
     @NotNull(message = "GPA cannot be null")
     @Column(nullable = false)
     private Double GPA = 0.0;
+
+    @Transient
+    private Integer totalHours;
 
     @JsonIgnore
     @ManyToOne
@@ -57,4 +60,10 @@ public class Student {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ClassStudent> classStudents = new ArrayList<>();
+
+    public void updateGPA(ClassStudent cs) {
+        Integer courseCreditHours = cs.getAClass().getCourse().getCreditHours();
+        double qualityPoints = GPA * (totalHoursCompleted - courseCreditHours) + courseCreditHours * Class.convertToGPA(cs.getLetterGrades());
+        GPA = (qualityPoints / (totalHours));
+    }
 }

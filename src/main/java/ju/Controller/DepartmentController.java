@@ -61,7 +61,9 @@ public class DepartmentController {
 
     // Update an existing department by its ID
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateDepartment(@RequestBody Department department, @PathVariable Integer id) {
+    public ResponseEntity<String> updateDepartment(
+            @RequestBody Department department,
+            @PathVariable Integer id) {
         boolean isUpdate = departmentService.updateDepartment(department, id);
         if (isUpdate) {
             return new ResponseEntity<>("Department updated successfully!", HttpStatus.OK);

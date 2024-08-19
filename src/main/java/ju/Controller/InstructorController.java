@@ -22,7 +22,9 @@ public class InstructorController {
 
     // Get an instructor by their ID
     @GetMapping("/{departmentId}/instructor/{id}")
-    public ResponseEntity<InstructorDTO> getInstructorById(@PathVariable Integer departmentId, @PathVariable Integer id) {
+    public ResponseEntity<InstructorDTO> getInstructorById(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer id) {
         return ResponseEntity.ok(instructorService.getInstructorById(departmentId, id));
     }
 
@@ -40,7 +42,9 @@ public class InstructorController {
 
     // Add a new instructor to a department
     @PostMapping("/{departmentId}/instructor")
-    public ResponseEntity<String> addInstructor(@RequestBody Instructor instructor, @PathVariable Integer departmentId) {
+    public ResponseEntity<String> addInstructor(
+            @RequestBody Instructor instructor,
+            @PathVariable Integer departmentId) {
         boolean isAdded = instructorService.addInstructor(instructor, departmentId);
         if (isAdded) {
             return new ResponseEntity<>("Instructor added successfully!", HttpStatus.CREATED);
@@ -51,7 +55,9 @@ public class InstructorController {
 
     // Delete an instructor by their ID
     @DeleteMapping("/{departmentId}/instructor/{id}")
-    public ResponseEntity<String> deleteInstructorById(@PathVariable Integer departmentId, @PathVariable Integer id) {
+    public ResponseEntity<String> deleteInstructorById(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer id) {
         boolean isRemoved = instructorService.deleteInstructorById(departmentId, id);
         if (isRemoved) {
             return new ResponseEntity<>("Instructor deleted successfully!", HttpStatus.OK);
@@ -85,7 +91,10 @@ public class InstructorController {
 
     // Update an existing instructor by their ID
     @PutMapping("/{departmentId}/instructor/{id}")
-    public ResponseEntity<String> updateInstructor(@RequestBody Instructor instructor, @PathVariable Integer departmentId, @PathVariable Integer id) {
+    public ResponseEntity<String> updateInstructor(
+            @RequestBody Instructor instructor,
+            @PathVariable Integer departmentId,
+            @PathVariable Integer id) {
         boolean isUpdate = instructorService.updateInstructor(instructor, departmentId, id);
         if (isUpdate) {
             return new ResponseEntity<>("Instructor updated successfully!", HttpStatus.OK);

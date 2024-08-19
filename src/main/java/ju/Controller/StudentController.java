@@ -23,7 +23,9 @@ public class StudentController {
 
     // Get a student by their ID
     @GetMapping("/{departmentId}/student/{id}")
-    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Integer departmentId, @PathVariable Integer id) {
+    public ResponseEntity<StudentDTO> getStudentById(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer id) {
         return ResponseEntity.ok(studentService.getStudentById(departmentId, id));
     }
 
@@ -41,7 +43,9 @@ public class StudentController {
 
     // Add a new student to a department
     @PostMapping("/{departmentId}/student")
-    public ResponseEntity<String> addStudent(@RequestBody Student student, @PathVariable Integer departmentId) {
+    public ResponseEntity<String> addStudent(
+            @RequestBody Student student,
+            @PathVariable Integer departmentId) {
         boolean isAdded = studentService.addStudent(student, departmentId);
         if (isAdded) {
             return new ResponseEntity<>("Student added successfully!", HttpStatus.CREATED);
@@ -52,7 +56,9 @@ public class StudentController {
 
     // Delete a student by their ID
     @DeleteMapping("/{departmentId}/student/{id}")
-    public ResponseEntity<String> deleteStudentById(@PathVariable Integer departmentId, @PathVariable Integer id) {
+    public ResponseEntity<String> deleteStudentById(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer id) {
         boolean isRemoved = studentService.deleteStudentById(departmentId, id);
         if (isRemoved) {
             return new ResponseEntity<>("Student deleted successfully!", HttpStatus.OK);
@@ -86,7 +92,10 @@ public class StudentController {
 
     // Update an existing student by their ID
     @PutMapping("/{departmentId}/student/{id}")
-    public ResponseEntity<String> updateStudent(@RequestBody Student student, @PathVariable Integer departmentId, @PathVariable Integer id) {
+    public ResponseEntity<String> updateStudent(
+            @RequestBody Student student,
+            @PathVariable Integer departmentId,
+            @PathVariable Integer id) {
         boolean isUpdate = studentService.updateStudent(student, departmentId, id);
         if (isUpdate) {
             return new ResponseEntity<>("Student updated successfully!", HttpStatus.OK);

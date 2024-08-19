@@ -19,8 +19,6 @@ import java.sql.Time;
 import java.time.Year;
 import java.util.*;
 
-import static java.lang.Integer.sum;
-
 // Lombok's annotations for boilerplate code
 @AllArgsConstructor
 @NoArgsConstructor
@@ -70,22 +68,29 @@ public class Class {
     private List<ClassStudent> classStudents = new ArrayList<>();
 
     public void addStudent(Student student, Double grade) {
-        for (ClassStudent cs : classStudents)
-            if (cs.getStudent().getId().equals(student.getId()))
-                if (cs.getPassed().equals(Passed.PASS))
-                    throw new ResourceNotFoundException("Student is finished this class.");
-                else
-                    throw new ResourceNotFoundException("Student is already enrolled in this class.");
+        classStudents.stream()
+                .filter(cs -> cs.getStudent().getId().equals(student.getId()))
+                .findFirst()
+                .ifPresent(cs -> {
+                    if (cs.getPassed().equals(Passed.PASS)) {
+                        throw new ResourceNotFoundException("Student has finished this class.");
+                    } else if (cs.getPassed().equals(Passed.ACTIVE)) {
+                        throw new ResourceNotFoundException("Student is already enrolled in this class.");
+                    } else
+                        throw new ResourceNotFoundException("Student is failed in this class.");
+                });
 
-        for (ClassStudent s : student.getClassStudents()) {
-            if (s.getAClass().getCourse().getId().equals(this.getCourse().getId())) {
-                if (s.getPassed().equals(Passed.PASS)) {
-                    throw new ResourceNotFoundException("Student has already passed this course.");
-                } else if (s.getPassed().equals(Passed.ACTIVE)) {
-                    throw new ResourceNotFoundException("Student is already enrolled in this course.");
-                }
-            }
-        }
+        student.getClassStudents().stream()
+                .filter(s -> s.getAClass().getCourse().getId().equals(this.getCourse().getId()))
+                .findFirst()
+                .ifPresent(s -> {
+                    if (s.getPassed().equals(Passed.PASS)) {
+                        throw new ResourceNotFoundException("Student has already passed this course.");
+                    } else if (s.getPassed().equals(Passed.ACTIVE)) {
+                        throw new ResourceNotFoundException("Student is already enrolled in this course.");
+                    } else
+                        throw new ResourceNotFoundException("Student is failed in this course.");
+                });
 
         // Check if a student is enrolled in another class at the same time
         for (ClassStudent s : student.getClassStudents())
@@ -165,19 +170,26 @@ public class Class {
         ClassStudent classStudent = new ClassStudent();
         classStudent.setAClass(this);
         classStudent.setStudent(student);
+        Integer courseCreditHours = classStudent.getAClass().getCourse().getCreditHours();
+
         if (grade == null)
             classStudent.setPassed(Passed.ACTIVE);
         else if (grade >= 45) {
             classStudent.setGrade(grade);
             classStudent.setPassed(Passed.PASS);
             classStudent.setLetterGrades(convertToLetter(grade));
-            student.setTotalHoursCompleted(sum(student.getTotalHoursCompleted(), classStudent.getAClass().getCourse().getCreditHours()));
+
+            student.setTotalHoursCompleted(student.getTotalHoursCompleted() + courseCreditHours);
             student.setTotalHoursRemaining(student.getDepartment().getTotalHoursRequired() - student.getTotalHoursCompleted());
-            student.setGPA(convertToGPA(classStudent.getLetterGrades()));
+            student.setTotalHours(student.getTotalHoursCompleted());
+            student.updateGPA(classStudent);
         } else {
             classStudent.setGrade(grade);
             classStudent.setPassed(Passed.FAILED);
             classStudent.setLetterGrades(convertToLetter(grade));
+
+            student.setTotalHours(student.getTotalHours() + courseCreditHours);
+            student.updateGPA(classStudent);
         }
         classStudents.add(classStudent);
     }

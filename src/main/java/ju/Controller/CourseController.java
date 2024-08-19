@@ -22,7 +22,9 @@ public class CourseController {
 
     // Get a course by their ID
     @GetMapping("/{departmentId}/course/{id}")
-    public ResponseEntity<CourseDTO> getCourseById(@PathVariable Integer departmentId, @PathVariable Integer id) {
+    public ResponseEntity<CourseDTO> getCourseById(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer id) {
         return ResponseEntity.ok(courseService.getCourseById(departmentId, id));
     }
 
@@ -40,7 +42,9 @@ public class CourseController {
 
     // Add a new course to a department
     @PostMapping("/{departmentId}/course")
-    public ResponseEntity<String> addCourse(@RequestBody Course course, @PathVariable Integer departmentId) {
+    public ResponseEntity<String> addCourse(
+            @RequestBody Course course,
+            @PathVariable Integer departmentId) {
         boolean isAdded = courseService.addCourse(course, departmentId);
         if (isAdded) {
             return new ResponseEntity<>("Course added successfully!", HttpStatus.CREATED);
@@ -51,7 +55,9 @@ public class CourseController {
 
     // Delete a course by their ID
     @DeleteMapping("/{departmentId}/course/{id}")
-    public ResponseEntity<String> deleteCourseById(@PathVariable Integer departmentId, @PathVariable Integer id) {
+    public ResponseEntity<String> deleteCourseById(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer id) {
         boolean isRemoved = courseService.deleteCourseById(departmentId, id);
         if (isRemoved) {
             return new ResponseEntity<>("Course deleted successfully!", HttpStatus.OK);
@@ -85,7 +91,10 @@ public class CourseController {
 
     // Update an existing course by their ID
     @PutMapping("/{departmentId}/course/{id}")
-    public ResponseEntity<String> updateCourse(@RequestBody Course course, @PathVariable Integer departmentId, @PathVariable Integer id) {
+    public ResponseEntity<String> updateCourse(
+            @RequestBody Course course,
+            @PathVariable Integer departmentId,
+            @PathVariable Integer id) {
         boolean isUpdate = courseService.updateCourse(course, departmentId, id);
         if (isUpdate) {
             return new ResponseEntity<>("Course updated successfully!", HttpStatus.OK);
@@ -96,7 +105,10 @@ public class CourseController {
 
     // Add Prerequisite a course
     @PostMapping("/{departmentId}/course/{id}/prerequisite/{prerequisiteId}")
-    public ResponseEntity<String> addPrerequisite(@PathVariable Integer departmentId, @PathVariable Integer id, @PathVariable Integer prerequisiteId) {
+    public ResponseEntity<String> addPrerequisite(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer id,
+            @PathVariable Integer prerequisiteId) {
         boolean isAdded = courseService.addPrerequisite(departmentId, id, prerequisiteId);
         if (isAdded) {
             return new ResponseEntity<>(String.format("Prerequisite with ID %d added on course with ID %d successfully!", prerequisiteId, id), HttpStatus.OK);
@@ -107,7 +119,10 @@ public class CourseController {
 
     // Delete Prerequisite from course
     @DeleteMapping("/{departmentId}/course/{id}/prerequisite/{prerequisiteId}")
-    public ResponseEntity<String> deletePrerequisite(@PathVariable Integer departmentId, @PathVariable Integer id, @PathVariable Integer prerequisiteId) {
+    public ResponseEntity<String> deletePrerequisite(
+            @PathVariable Integer departmentId,
+            @PathVariable Integer id,
+            @PathVariable Integer prerequisiteId) {
         boolean isRemove = courseService.deletePrerequisite(departmentId, id, prerequisiteId);
         if (isRemove) {
             return new ResponseEntity<>(String.format("Prerequisite deleted on course with ID %d successfully!", id), HttpStatus.OK);
