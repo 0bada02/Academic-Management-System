@@ -174,24 +174,20 @@ public class Class {
 
         if (grade == null)
             classStudent.setPassed(Passed.ACTIVE);
-        else if (grade >= 45) {
+        else {
             classStudent.setGrade(grade);
-            classStudent.setPassed(Passed.PASS);
+            classStudent.setPassed(grade >= 45 ? Passed.PASS : Passed.FAILED);
             classStudent.setLetterGrades(convertToLetter(grade));
-
-            student.setTotalHoursCompleted(student.getTotalHoursCompleted() + courseCreditHours);
-            student.setTotalHoursRemaining(student.getDepartment().getTotalHoursRequired() - student.getTotalHoursCompleted());
-            student.setTotalHours(student.getTotalHoursCompleted());
             student.updateGPA(classStudent);
-        } else {
-            classStudent.setGrade(grade);
-            classStudent.setPassed(Passed.FAILED);
-            classStudent.setLetterGrades(convertToLetter(grade));
-
-            student.setTotalHours(student.getTotalHours() + courseCreditHours);
-            student.updateGPA(classStudent);
+            if (grade >= 45) {
+                student.setTotalHoursCompleted(student.getTotalHoursCompleted() + courseCreditHours);
+                student.setTotalHoursRemaining(student.getDepartment().getTotalHoursRequired() - student.getTotalHoursCompleted());
+            } else {
+                student.setTotalHoursFailed(student.getTotalHoursFailed() + courseCreditHours);
+            }
         }
         classStudents.add(classStudent);
+        this.setStatus(this.getClassStudents().size() >= this.getCapacity() ? ClassStatus.CLOSE : ClassStatus.OPEN);
     }
 
     public static String convertToLetter(Double numericGrade) {
@@ -235,7 +231,7 @@ public class Class {
             case "D+" -> 1.5;
             case "D" -> 1.0;
             case "D-" -> 0.75;
-            case "F" -> 0.5;
+            case "F" -> 0.0;
             default -> throw new IllegalArgumentException("Invalid letter grade: " + letterGrade);
         };
     }

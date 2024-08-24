@@ -20,13 +20,13 @@ public class ClassStudentController {
             @PathVariable Integer courseId,
             @PathVariable Integer classId,
             @PathVariable Integer studentId,
-            @RequestParam(required = false) Double grade) {
+            @RequestParam Double grade) {
         boolean isAdded = classStudentService.addGrade(departmentId, courseId, classId, studentId, grade);
         if (isAdded) {
             return new ResponseEntity<>(String.format("Grade %.2f has been successfully set for student with ID %d in class with ID %d."
                     , grade, studentId, classId), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(String.format("classStudent not found with ID %d", studentId), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("The grade for this student has already been recorded.", HttpStatus.CONFLICT);
         }
     }
 }

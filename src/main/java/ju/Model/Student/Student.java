@@ -42,6 +42,10 @@ public class Student {
     @Column(nullable = false)
     private Integer totalHoursCompleted = 0;
 
+    @NotNull(message = "Total Hours Failed cannot be null")
+    @Column(nullable = false)
+    private Integer totalHoursFailed = 0;
+
     @NotNull(message = "Total Hours Remaining cannot be null")
     @Column(nullable = false)
     private Integer totalHoursRemaining;
@@ -50,8 +54,6 @@ public class Student {
     @Column(nullable = false)
     private Double GPA = 0.0;
 
-    @Transient
-    private Integer totalHours;
 
     @JsonIgnore
     @ManyToOne
@@ -63,7 +65,8 @@ public class Student {
 
     public void updateGPA(ClassStudent cs) {
         Integer courseCreditHours = cs.getAClass().getCourse().getCreditHours();
-        double qualityPoints = GPA * (totalHoursCompleted - courseCreditHours) + courseCreditHours * Class.convertToGPA(cs.getLetterGrades());
-        GPA = (qualityPoints / (totalHours));
+        Integer totalHours = totalHoursCompleted + totalHoursFailed;
+        double qualityPoints = GPA * totalHours + courseCreditHours * Class.convertToGPA(cs.getLetterGrades());
+        GPA = qualityPoints / (totalHours + courseCreditHours);
     }
 }

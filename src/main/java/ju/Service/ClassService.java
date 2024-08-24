@@ -258,7 +258,6 @@ public class ClassService {
             Student student = studentRepository.findById(studentId).get();
             Class aClass = classRepository.findById(classId).get();
             aClass.addStudent(student, grade);
-            aClass.setStatus(aClass.getClassStudents().size() >= aClass.getCapacity() ? ClassStatus.CLOSE : ClassStatus.OPEN);
             try {
                 classRepository.save(aClass);
                 studentRepository.save(student);
