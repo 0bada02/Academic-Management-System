@@ -15,7 +15,7 @@ import java.util.*;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Course")
+@Table(name = "Courses")
 public class Course {
 
     @Id
@@ -32,7 +32,7 @@ public class Course {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "Prerequisite_Courses",
+            name = "Prerequisite_Course",
             joinColumns = @JoinColumn(name = "Course_Id"),
             inverseJoinColumns = @JoinColumn(name = "Prerequisite_Id")
     )

@@ -14,7 +14,7 @@ import java.util.*;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Instructor")
+@Table(name = "Instructors")
 public class Instructor {
 
     @Id
@@ -44,4 +44,9 @@ public class Instructor {
 
     @OneToMany(mappedBy = "instructor", fetch = FetchType.EAGER)
     private List<Class> classes = new ArrayList<>();
+
+    public void generateEmail() {
+        String[] names = name.split(" ");
+        email = names[0].concat("@ju.edu.jo");
+    }
 }

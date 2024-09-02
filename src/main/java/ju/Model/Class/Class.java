@@ -24,7 +24,7 @@ import java.util.*;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Class")
+@Table(name = "Classes")
 public class Class {
 
     @Id
