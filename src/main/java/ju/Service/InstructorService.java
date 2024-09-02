@@ -75,6 +75,7 @@ public class InstructorService {
             return false;
         } else {
             instructor.setDepartment(departmentRepository.findById(departmentId).get());
+            instructor.generateEmail();
             instructorRepository.save(instructor);
             return true;
         }

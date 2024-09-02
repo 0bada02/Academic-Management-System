@@ -15,7 +15,7 @@ import java.util.*;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Student")
+@Table(name = "Students")
 public class Student {
 
     @Id
@@ -54,7 +54,6 @@ public class Student {
     @Column(nullable = false)
     private Double GPA = 0.0;
 
-
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "Department_Id")
@@ -68,5 +67,10 @@ public class Student {
         Integer totalHours = totalHoursCompleted + totalHoursFailed;
         double qualityPoints = GPA * totalHours + courseCreditHours * Class.convertToGPA(cs.getLetterGrades());
         GPA = qualityPoints / (totalHours + courseCreditHours);
+    }
+
+    public void generateEmail() {
+        String[] names = name.split(" ");
+        email = names[0].concat("@ju.edu.jo");
     }
 }

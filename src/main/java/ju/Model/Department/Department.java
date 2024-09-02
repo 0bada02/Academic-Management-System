@@ -14,7 +14,7 @@ import java.util.*;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Department")
+@Table(name = "Departments")
 public class Department {
 
     @Id
