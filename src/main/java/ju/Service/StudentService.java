@@ -76,6 +76,7 @@ public class StudentService {
         } else {
             student.setDepartment(departmentRepository.findById(departmentId).get());
             student.setTotalHoursRemaining(student.getDepartment().getTotalHoursRequired() - student.getTotalHoursCompleted());
+            student.generateEmail();
             studentRepository.save(student);
             return true;
         }
