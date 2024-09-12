@@ -3,6 +3,7 @@ package ju.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import ju.Model.User.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JWTService {
+public class JwtService {
 
     private final String secretKey;
 
-    public JWTService() {
+    public JwtService() {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
             SecretKey key = keyGen.generateKey();
@@ -30,19 +31,33 @@ public class JWTService {
         }
     }
 
-    public String generateJWT(String username) {
+    public String generateJWT(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+//        claims.put("role", userDetails.getAuthorities().stream()
+//                .findFirst().get().getAuthority()); // Add a role to claims
 
         return Jwts.builder()
-                .claims()
-                .add(claims)
-                .subject(username)
-                .issuedAt(new Date((System.currentTimeMillis())))
-                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
-                .and()
+                .claims(claims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour expiration
                 .signWith(getKey())
                 .compact();
     }
+
+//    public String generateJWT(String username) {
+//        Map<String, Object> claims = new HashMap<>();
+//
+//        return Jwts.builder()
+//                .claims()
+//                .add(claims)
+//                .subject(username)
+//                .issuedAt(new Date((System.currentTimeMillis())))
+//                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
+//                .and()
+//                .signWith(getKey())
+//                .compact();
+//    }
 
     public SecretKey getKey() {
 //        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -79,5 +94,9 @@ public class JWTService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public String extractUserRole(String token) {
+        return extractClaim(token, claims -> claims.get("role", String.class));
     }
 }

@@ -5,6 +5,7 @@ import ju.Model.Department.Department;
 import ju.Service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -23,11 +24,13 @@ public class DepartmentController {
     }
 
     // Get all departments
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public ResponseEntity<List<DepartmentDTO>> getAllDepartments() {
         return ResponseEntity.ok(departmentService.getAllDepartments());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<String> addDepartment(@RequestBody Department department) {
         boolean isAdded = departmentService.addDepartment(department);

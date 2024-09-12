@@ -19,21 +19,21 @@ public class UserService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JWTService jwtService;
+    private JwtService jwtService;
 
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
-    public String verify(User user) {
+    public String login(User user) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
         if (authentication.isAuthenticated())
-            return jwtService.generateJWT(user.getUsername());
+            return jwtService.generateJWT(user);
 
         return null;
     }
 
-    public void addAdmin(User user) {
+    public void register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepositry.save(user);
     }

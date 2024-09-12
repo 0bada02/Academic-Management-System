@@ -13,13 +13,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/addAdmin")
-    public void addAdmin(@RequestBody User user) {
-        userService.addAdmin(user);
+    @PostMapping("/register")
+    public void register(@RequestBody User user) {
+        userService.register(user);
     }
 
     @PostMapping("/login")
     public String login(@RequestBody User user) {
-        return userService.verify(user);
+        return userService.login(user);
     }
 }

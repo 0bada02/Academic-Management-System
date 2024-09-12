@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "User")
 public class User implements UserDetails {
@@ -24,8 +25,11 @@ public class User implements UserDetails {
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 }
